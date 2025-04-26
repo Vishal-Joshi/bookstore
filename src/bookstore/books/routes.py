@@ -1,7 +1,8 @@
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 
-from . import book_bp
 from ..book_service import BookService
+
+book_bp = Blueprint('books', __name__, url_prefix='/books')
 
 
 @book_bp.route('', methods=['POST'])

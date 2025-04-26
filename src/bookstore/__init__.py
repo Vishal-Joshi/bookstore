@@ -1,5 +1,6 @@
 from flask import Flask
 
+from .books.routes import book_bp
 from .config import Config
 from .extensions import db
 
@@ -15,6 +16,5 @@ def create_app(config_object=None):
     with app.app_context():
         db.create_all()
 
-    from .books import book_bp
     app.register_blueprint(book_bp)
     return app
