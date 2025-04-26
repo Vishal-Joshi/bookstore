@@ -28,3 +28,9 @@ def add_book():
 def get_books():
     books = Book.query.all()
     return jsonify([book.to_dict() for book in books])
+
+
+@book_bp.route('/<int:id>', methods=['GET'])
+def get_book_by_id(id):
+    book = Book.query.filter_by(id=id).first()
+    return jsonify(book.to_dict())

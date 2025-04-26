@@ -98,3 +98,34 @@ def test_should_get_all_books(client):
     assert len(books) == 2
     assert books[0]['title'] == book_data_1['title']
     assert books[1]['title'] == book_data_2['title']
+
+
+def test_should_be_able_to_get_books_with_specific_id(client):
+    # given
+    book_data_1 = {
+        'title': "title of book 1",
+        'description': "description of book",
+        'author': "VJ",
+        'price': 10
+    }
+
+    book_data_2 = {
+        'title': "title of book 2",
+        'description': "description of book",
+        'author': "VJ",
+        'price': 10
+    }
+
+    book_1_response = client.post('/books',json=book_data_1).get_json()
+    book_2_response = client.post('/books',json=book_data_2).get_json()
+
+    # when
+    book_1_get_response = client.get(f"/books/{book_1_response['id']}")
+    book_2_get_response = client.get(f"/books/{book_2_response['id']}")
+
+    # then
+    assert book_1_get_response.status_code == 200
+    book1 = book_1_get_response.get_json()
+    assert book1['title'] == book_1_response['title']
+    book2 = book_2_get_response.get_json()
+    assert book2['title'] == book_2_response['title']
