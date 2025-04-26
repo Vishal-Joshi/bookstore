@@ -1,8 +1,8 @@
 import pytest
 
+from TestConfig import TestConfig
 from src.bookstore import create_app
 from src.bookstore.extensions import db
-from TestConfig import TestConfig
 from src.bookstore.models import Book
 
 
@@ -71,3 +71,30 @@ def test_should_return_bad_request_if_book_with_same_title_exists(client, app, i
     assert response.status_code == 409
     assert response.json['message'] == f"book with {book_data['title']} already exists"
 
+
+def test_should_get_all_books(client):
+    book_data_1 = {
+        'title': "title of book 1",
+        'description': "description of book",
+        'author': "VJ",
+        'price': 10
+    }
+
+    book_data_2 = {
+        'title': "title of book 2",
+        'description': "description of book",
+        'author': "VJ",
+        'price': 10
+    }
+
+    client.post('/books', json=book_data_1)
+    client.post('/books', json=book_data_2)
+
+    # when
+    response = client.get('/books')
+
+    assert response.status_code == 200
+    books = response.get_json()
+    assert len(books) == 2
+    assert books[0]['title'] == book_data_1['title']
+    assert books[1]['title'] == book_data_2['title']

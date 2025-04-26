@@ -1,6 +1,7 @@
 from flask import request, jsonify, Blueprint
 
 from ..book_service import BookService
+from ..models import Book
 
 book_bp = Blueprint('books', __name__, url_prefix='/books')
 
@@ -21,3 +22,9 @@ def add_book():
             "author": book.author,
             "price": book.price
         }), 201
+
+
+@book_bp.route('', methods=['GET'])
+def get_books():
+    books = Book.query.all()
+    return jsonify([book.to_dict() for book in books])

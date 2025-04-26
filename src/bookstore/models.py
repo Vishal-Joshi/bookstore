@@ -10,3 +10,16 @@ class Book(db.Model):
 
     def __repr__(self):
         return f"<Book {self.title} by {self.author}"
+
+    def to_dict(self):
+        """
+        Convert to dictionary
+        :return: dictionary of book object
+        """
+        return {
+            'id': self.id,
+            'title': self.title,
+            'author': self.author,
+            'price': self.price,
+            'description': self.description
+        }
